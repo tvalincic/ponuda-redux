@@ -9,7 +9,7 @@ export const Slip = () => {
   const oddIds = useSelector(selectOddIds);
   const dispatch = useDispatch();
   return (
-    <div className="slip">
+    <section className="slip">
       <div className="odds">
         {oddIds.map((odd) => (
           <Odd oddId={odd} key={odd} />
@@ -28,6 +28,6 @@ export const Slip = () => {
         <div className="gain"></div>
         <div className="tax"></div>
       </div>
-    </div>
+    </section>
   );
 };
