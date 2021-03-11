@@ -1,12 +1,13 @@
 import * as expand from "./unpack";
 
-function constructOdds(odds = {}, offerId) {
+function constructOdds(odds = {}, offerId, eventId) {
   return Object.entries(odds).reduce(
     (data, [order, odd]) => {
       data.odds.push({
         ...odd,
         order,
-        offerId,
+        offer: offerId,
+        event: eventId,
       });
       data.oddIds.add(odd.id);
       return data;
@@ -24,9 +25,9 @@ function constructOffers(offers = {}, eventId) {
       const constructedOffer = {
         ...offer,
         offerKey,
-        eventId,
+        event: eventId,
       };
-      const { odds, oddIds } = constructOdds(offer.tecajevi, offer.id);
+      const { odds, oddIds } = constructOdds(offer.tecajevi, offer.id, eventId);
       data.odds = [...data.odds, ...odds];
       constructedOffer.odds = Array.from(oddIds);
       delete constructedOffer.tecajevi;
@@ -52,7 +53,7 @@ function constructLeaguesAndEvents(events = {}, sportId) {
             id: leagueId,
             baseTitle: event.baseLigaNaziv,
             title: event.liga,
-            sportId,
+            sport: sportId,
             eventIds: [],
           };
         }
@@ -62,14 +63,14 @@ function constructLeaguesAndEvents(events = {}, sportId) {
       const constructedEvent = {
         ...event,
         id,
-        leagueId,
+        league: leagueId,
       };
       delete constructedEvent.baseLigaId;
       delete constructedEvent.ligaId;
       delete constructedEvent.baseLigaNaziv;
       delete constructedEvent.liga;
       delete constructedEvent.ponude;
-      const { offers, odds, offerIds } = constructOffers(event.ponude);
+      const { offers, odds, offerIds } = constructOffers(event.ponude, id);
       data.offers = [...data.offers, ...offers];
       data.odds = [...data.odds, ...odds];
       constructedEvent.offers = Array.from(offerIds);
