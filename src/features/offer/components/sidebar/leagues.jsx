@@ -2,12 +2,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   selectActiveLeagueId,
-  selectActiveLeagueIds,
+  selectActiveSportLeagueIds,
 } from "../../state/selectors";
 import { League } from "./league";
 
 export const Leagues = () => {
-  const leagueIds = useSelector(selectActiveLeagueIds);
+  const leagueIds = useSelector(selectActiveSportLeagueIds);
   const activeLeague = useSelector(selectActiveLeagueId);
   return (
     <div className="leagues">

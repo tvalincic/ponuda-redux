@@ -13,10 +13,8 @@ export const {
   selectIds: selectSportIds,
 } = sportsAdapter.getSelectors(({ offer }) => offer.sports);
 
-export const selectActiveSportId = ({ offer }) => {
-  if (offer.activeSport === null) return offer.sports.ids[0];
-  return offer.activeSport;
-};
+export const selectActiveSportId = ({ offer }) => offer.activeSport;
+
 export const selectActiveSport = (state) => {
   return state.offer.sports.entities[selectActiveSportId(state)];
 };
@@ -27,9 +25,16 @@ export const {
   selectIds: selectLeagueIds,
 } = leagueAdapter.getSelectors(({ offer }) => offer.leagues);
 
-export const selectActiveLeagueId = ({ offer }) => {
-  if (offer.activeLeague === null) return offer.leagues.ids[0];
-  return offer.activeLeague;
+export const selectActiveLeagueId = ({ offer }) => offer.activeLeague;
+
+export const selectActiveLeagueIds = (state) => {
+  const { offer } = state;
+  if (offer.activeLeague) return [offer.activeLeague];
+  if (offer.activeSport) {
+    const sport = selectActiveSport(state);
+    if (sport) return sport.leagues;
+  }
+  return offer.leagues.ids;
 };
 
 export const {
@@ -75,7 +80,7 @@ export const selectEventPrimaryOfferOdds = createSelector(
   }
 );
 
-export const selectActiveLeagueIds = createSelector(
+export const selectActiveSportLeagueIds = createSelector(
   selectActiveSport,
   (activeSport) => {
     if (!activeSport) return [];

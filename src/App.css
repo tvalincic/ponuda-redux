@@ -9,6 +9,8 @@
 
 .slip {
   background-color: #fff;
+  position: sticky;
+  top: 5px;
 }
 
 .slip-header {
@@ -160,8 +162,14 @@
   font-weight: bold;
 }
 
+.sport-tab.active {
+  position: sticky;
+  top: 0;
+}
+
 .league-content {
   background: #fff;
+  margin-bottom: 10px;
 }
 
 .league-heading {

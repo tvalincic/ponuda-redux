@@ -45,10 +45,17 @@ const offerSlice = createSlice({
   initialState,
   reducers: {
     changeActiveSport(state, action) {
-      state.activeSport = action.payload;
+      if (state.activeSport !== action.payload) {
+        state.activeSport = action.payload;
+        state.activeLeague = null;
+        window.scrollTo(0, 0);
+      }
     },
     changeActiveLeague(state, action) {
-      state.activeLeague = action.payload;
+      if (state.activeLeague !== action.payload) {
+        state.activeLeague = action.payload;
+        window.scrollTo(0, 0);
+      }
     },
   },
   extraReducers: {
