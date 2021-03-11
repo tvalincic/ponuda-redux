@@ -25,9 +25,7 @@ const diffs = [
 export const client = {
   fetchOffer() {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(full);
-      }, 100);
+      resolve(full);
     });
   },
   subscribe(fn) {
