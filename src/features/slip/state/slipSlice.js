@@ -1,32 +1,55 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import { addOdd, changeStake } from "./actions";
+import { addOdd, changeStake, getCurrentSlip, combineIds } from "./actions";
 
 export const slipAdapter = createEntityAdapter({
   selectId: (odd) => odd.innerId,
 });
 
 const initialState = slipAdapter.getInitialState({
-  odd: 0,
-  payout: 0,
-  eventualPayout: 0,
-  type: 0,
-  status: 0,
-  numberOfSelection: 0,
-  error: "Krenite s odabirom tečajeva!",
-  number: 0,
-  time: 0,
-  subscriptionNumber: null,
-  stakeWithoutMC: 0,
-  stake: 0,
-  tax: 0,
+  ...getCurrentSlip(),
 });
+
+function hasReplacement(slipData) {
+  return slipData.zamjena && slipData.removed && !!slipData.removed.length;
+}
+
+function getOddIdsToRemove(odds = []) {
+  return odds.reduce((old, odd) => {
+    old.push(combineIds(odd.tecajId, odd.izvorId));
+    return old;
+  }, []);
+}
 
 const slipSlice = createSlice({
   name: "slip",
   initialState,
   reducers: {},
   extraReducers: {
-    [addOdd.fulfilled]: slipAdapter.addOne,
+    [addOdd.fulfilled]: (state, action) => {
+      const { newOdd, ...slipData } = action.payload;
+      slipAdapter.upsertOne(state, newOdd);
+
+      if (hasReplacement(slipData)) {
+        const ids = getOddIdsToRemove(slipData.removed);
+        slipAdapter.removeMany(state, ids);
+      }
+
+      state.odd = slipData.odd;
+      state.payout = slipData.payout;
+      state.winning = slipData.winning;
+      state.eventualPayout = slipData.eventualPayout;
+      state.type = slipData.type;
+      state.status = slipData.status;
+      state.numberOfSelection = slipData.numberOfSelection;
+      state.error = slipData.error;
+      state.number = slipData.number;
+      state.time = slipData.time;
+      state.subscriptionNumber = slipData.subscriptionNumber;
+      state.stakeWithoutMC = slipData.stakeWithoutMC;
+      state.stake = slipData.stake;
+      state.tax = slipData.tax;
+      state.mc = slipData.mc;
+    },
     [addOdd.rejected]: (_, action) => {
       console.error(action);
     },

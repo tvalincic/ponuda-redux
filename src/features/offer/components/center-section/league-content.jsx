@@ -6,7 +6,7 @@ import { Event } from "./event";
 export const LeagueContent = ({ leagueId }) => {
   const league = useSelector((state) => selectLeagueById(state, leagueId));
   const sport = useSelector((state) =>
-    selectSportById(state, league ? league.sportId : null)
+    selectSportById(state, league ? league.sport : null)
   );
   if (!league) return null;
   return (
