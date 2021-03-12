@@ -41,7 +41,7 @@ const initialState = {
 };
 
 const offerSlice = createSlice({
-  name: "slip",
+  name: "offer",
   initialState,
   reducers: {
     changeActiveSport(state, action) {
