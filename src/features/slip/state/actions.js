@@ -21,7 +21,7 @@ export function getCurrentSlip() {
     stakeWithoutMC: slip.ulogBez(),
     stake: slip.ulogSa(),
     tax: taxCalculation.porez,
-    mc: slip.ulogMt()
+    mc: slip.ulogMt(),
   };
 }
 
@@ -36,12 +36,13 @@ function constructOdd(state, oddId) {
   return {
     datum: event.vrijeme ? event.vrijeme.split("T")[0] : "",
     dogadjajId: event.baseId,
-    id: odd.id,
+    id: odd.oddId,
     izvorId: 1,
     naziv: `${event.domacin}-${event.gost}`,
-    ponudaId: offer.id,
+    ponudaId: offer.offerId,
+    offerKey: offer.id,
     tecaj: odd.tecaj,
-    tecajId: odd.id,
+    tecajId: odd.oddId,
     tip: odd.naziv,
     vrijeme: event.vrijeme,
     eventId: event.id,
@@ -62,9 +63,9 @@ export const addOdd = createAsyncThunk(
     return {
       newOdd: {
         event: odd.eventId,
-        odd: odd.id,
-        offer: odd.ponudaId,
-        innerId: combineIds(odd.id, odd.izvorId),
+        odd: oddId,
+        offer: odd.offerKey,
+        innerId: combineIds(oddId, odd.izvorId),
       },
       zamjena: ret.zamjena,
       removed: ret.removed,

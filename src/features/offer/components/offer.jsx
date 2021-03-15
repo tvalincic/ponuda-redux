@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchOffer } from "../state/offerSlice";
+import { fetchOffer } from "../state/actions";
 import { CenterSection } from "./center-section";
 import { Sidebar } from "./sidebar";
 

@@ -1,10 +1,5 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  createEntityAdapter,
-} from "@reduxjs/toolkit";
-import structure from "./structure";
-import { client } from "../../../api";
+import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import { fetchOffer } from "./actions";
 
 export const sportsAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.poredak - b.poredak,
@@ -22,11 +17,6 @@ export const offersAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.poredak - b.poredak,
 });
 export const oddsAdapter = createEntityAdapter();
-
-export const fetchOffer = createAsyncThunk("offer/fetchOffer", async () => {
-  const data = await client.fetchOffer();
-  return structure(data);
-});
 
 const initialState = {
   sports: sportsAdapter.getInitialState(),
