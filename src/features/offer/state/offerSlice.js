@@ -47,6 +47,14 @@ const offerSlice = createSlice({
         window.scrollTo(0, 0);
       }
     },
+    handleDiff(state, action) {
+      const { sports, leagues, events, offers, odds } = action.payload;
+      sportsAdapter.upsertMany(state.sports, sports);
+      leagueAdapter.upsertMany(state.leagues, leagues);
+      eventsAdapter.upsertMany(state.events, events);
+      offersAdapter.upsertMany(state.offers, offers);
+      oddsAdapter.upsertMany(state.odds, odds);
+    },
   },
   extraReducers: {
     [fetchOffer.fulfilled]: (state, action) => {
@@ -63,5 +71,10 @@ const offerSlice = createSlice({
   },
 });
 
-export const { changeActiveSport, changeActiveLeague } = offerSlice.actions;
+export const {
+  changeActiveSport,
+  changeActiveLeague,
+  handleDiff,
+} = offerSlice.actions;
+
 export const { reducer: offerReducer } = offerSlice;
