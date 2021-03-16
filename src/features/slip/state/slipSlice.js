@@ -1,5 +1,6 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import { addOdd, changeStake, getCurrentSlip, combineIds } from "./actions";
+import { addOdd, getCurrentSlip, combineIds } from "../../shared/actions";
+import { changeStake } from "./actions";
 
 export const slipAdapter = createEntityAdapter({
   selectId: (odd) => odd.innerId,
