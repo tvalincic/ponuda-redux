@@ -198,7 +198,12 @@
   border-right: 1px solid #dce2e6;
 }
 
-.event-odd.selectable:hover {
+.event-odd.selected {
+  background-color: #ad101a;
+  color: #fff;
+}
+
+.event-odd.selectable:not(.selected):hover {
   cursor: pointer;
   background-color: #e2e4e8;
 }

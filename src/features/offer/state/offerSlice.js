@@ -1,4 +1,5 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import { addOdd } from "../../shared";
 import { fetchOffer } from "./actions";
 
 export const sportsAdapter = createEntityAdapter({
@@ -24,7 +25,7 @@ const initialState = {
   events: eventsAdapter.getInitialState(),
   offers: offersAdapter.getInitialState(),
   odds: oddsAdapter.getInitialState(),
-  activeSport: null,
+  activeSport: 100,
   activeLeague: null,
   activeEvent: null,
   activeOffer: null,
@@ -67,6 +68,13 @@ const offerSlice = createSlice({
     },
     [fetchOffer.rejected]: (state, action) => {
       console.error(action.error);
+    },
+    [addOdd.fulfilled]: (state, action) => {
+      const { odd } = action.payload.newOdd;
+      oddsAdapter.updateOne(state.odds, {
+        id: odd,
+        changes: { selected: true },
+      });
     },
   },
 });
