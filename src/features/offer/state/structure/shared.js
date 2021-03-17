@@ -4,8 +4,8 @@ export function constructId(id, key) {
   return `${key}_${id}`;
 }
 
-export function getSport(sport, sportId) {
-  const constructed = { ...sport, id: sportId, leagues: [] };
+export function getSport(sport, sportId, isActive) {
+  const constructed = { ...sport, id: sportId, leagues: [], active: isActive };
   delete constructed.dogadjaji;
   return constructed;
 }
@@ -26,6 +26,8 @@ export function getLeague(event, leagueId, sportId) {
     title: event.liga,
     sport: sportId,
     eventIds: [],
+    activeEventIds: [],
+    active: false,
   };
 }
 

@@ -7,6 +7,7 @@ import {
   getOffer,
   getOdd,
 } from "./shared";
+import { eventState } from "../offerSlice";
 
 function structure(full) {
   const expandedOffer = expand.index(full);
@@ -32,20 +33,33 @@ function constructSports(sports) {
 }
 
 export function constructAndPushSport(sport, id, data) {
-  const leagueIds = constructLeaguesAndEvents(sport.dogadjaji, id, data);
-  const sportOffer = getSport(sport, id);
+  const { leagueIds, hasActiveLeague } = constructLeaguesAndEvents(
+    sport.dogadjaji,
+    id,
+    data
+  );
+  const sportOffer = getSport(sport, id, hasActiveLeague);
   sportOffer.leagues = [...leagueIds];
   data.sports.push(sportOffer);
 }
 
 export function constructLeaguesAndEvents(events = {}, sportId, data) {
   const leagueIds = new Set();
+  let hasActiveLeague = false;
   Object.entries(events).forEach(([id, event]) => {
     const leagueId = constructLeague(event, sportId, data, leagueIds);
-    if (leagueId) data.leagues[leagueId].eventIds.push(id);
+    if (leagueId) {
+      const league = data.leagues[leagueId];
+      league.eventIds.push(id);
+      if (event.stanje === eventState.active) league.activeEventIds.push(id);
+      if (!league.active && league.activeEventIds.length) {
+        league.active = true;
+        hasActiveLeague = true;
+      }
+    }
     constructAndPushEvent(event, id, leagueId, data);
   });
-  return Array.from(leagueIds);
+  return { leagueIds: Array.from(leagueIds), hasActiveLeague };
 }
 
 export function constructLeague(event, sportId, data, leagueIds) {

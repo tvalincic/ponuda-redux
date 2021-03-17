@@ -13,6 +13,15 @@ export const {
   selectIds: selectSportIds,
 } = sportsAdapter.getSelectors(({ offer }) => offer.sports);
 
+export const selectActiveSports = createSelector([selectSports], (sports) =>
+  sports.filter((s) => s.active)
+);
+
+export const selectActiveSportsIds = createSelector(
+  [selectActiveSports],
+  (sports) => sports.map((s) => s.id)
+);
+
 export const selectActiveSportId = ({ offer }) => offer.activeSport;
 
 export const selectActiveSport = (state) => {
@@ -25,17 +34,31 @@ export const {
   selectIds: selectLeagueIds,
 } = leagueAdapter.getSelectors(({ offer }) => offer.leagues);
 
+function filterActiveLeagues(leagueIds, leagues) {
+  return leagueIds.filter((id) => !!leagues[id] && leagues[id].active);
+}
+
 export const selectActiveLeagueId = ({ offer }) => offer.activeLeague;
 
-export const selectActiveLeagueIds = (state) => {
-  const { offer } = state;
-  if (offer.activeLeague) return [offer.activeLeague];
-  if (offer.activeSport) {
-    const sport = selectActiveSport(state);
-    if (sport) return sport.leagues;
+export const selectActiveLeagueIds = createSelector(
+  [
+    selectActiveLeagueId,
+    selectActiveSport,
+    selectActiveSports,
+    (state) => state.offer.leagues.entities,
+  ],
+  (activeLeague, activeSport, sports, leagues) => {
+    if (activeLeague) return [activeLeague];
+    if (activeSport) {
+      return filterActiveLeagues(activeSport.leagues, leagues);
+    }
+    return sports.reduce((leagueIds, sport) => {
+      const activeLeagues = filterActiveLeagues(sport.leagues, leagues);
+      leagueIds = [...leagueIds, ...activeLeagues];
+      return leagueIds;
+    }, []);
   }
-  return offer.leagues.ids;
-};
+);
 
 export const {
   selectAll: selectEvents,
@@ -81,10 +104,10 @@ export const selectEventPrimaryOfferOdds = createSelector(
 );
 
 export const selectActiveSportLeagueIds = createSelector(
-  selectActiveSport,
-  (activeSport) => {
+  [selectActiveSport, (state) => state.offer.leagues.entities],
+  (activeSport, leagues) => {
     if (!activeSport) return [];
-    return activeSport.leagues || [];
+    return filterActiveLeagues(activeSport.leagues, leagues);
   }
 );
 

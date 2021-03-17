@@ -21,7 +21,7 @@ export const LeagueContent = ({ leagueId }) => {
           <div className="event-type">X</div>
           <div className="event-type">2</div>
         </div>
-        {league.eventIds.map((event) => (
+        {league.activeEventIds.map((event) => (
           <Event eventId={event} key={event} />
         ))}
       </div>

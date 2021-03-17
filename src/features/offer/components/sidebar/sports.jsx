@@ -1,10 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectActiveSportId, selectSportIds } from "../../state/selectors";
+import {
+  selectActiveSportId,
+  selectActiveSportsIds,
+} from "../../state/selectors";
 import { Sport } from "./sport";
 
 export const Sports = () => {
-  const sportIds = useSelector(selectSportIds);
+  const sportIds = useSelector(selectActiveSportsIds);
   const activeSport = useSelector(selectActiveSportId);
   return (
     <div className="sports">

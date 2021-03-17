@@ -2,6 +2,15 @@ import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 import { addOdd } from "../../shared";
 import { fetchOffer } from "./actions";
 
+export const eventState = {
+  prematch: 1,
+  active: 2,
+  ended: 4,
+  1: "prematch",
+  2: "active",
+  4: "ended",
+};
+
 export const sportsAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.poredak - b.poredak,
 });
