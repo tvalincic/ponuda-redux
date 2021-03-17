@@ -97,9 +97,13 @@ function constructOddDiff(odds = {}, offer, eventId, data, state) {
       inactiveData(data.odds, oddKeyFromOffer);
       return data;
     }
-    if (!state.odds.entities[oddKeyFromOffer]) {
+    const oddFromState = state.odds.entities[oddKeyFromOffer];
+    if (!oddFromState) {
       constructAndPushOdd(oddDiff, oddKeyFromOffer, offer.id, eventId, data);
       return data;
+    }
+    if (oddFromState.tecaj && oddDiff.tecaj) {
+      oddDiff.trend = oddDiff.tecaj - oddFromState.tecaj;
     }
     checkAndPush(oddDiff, "", oddKeyFromOffer, data.odds);
   });

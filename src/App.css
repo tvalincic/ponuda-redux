@@ -203,6 +203,30 @@
   color: #fff;
 }
 
+.event-odd .ticker {
+  position: absolute;
+  right: 2px;
+  animation: hideTrend linear 0s forwards;
+  animation-delay: 4s;
+  animation-iteration-count: 1;
+  opacity: 1;
+  border-left: 4px solid rgba(0, 0, 0, 0);
+}
+
+.event-odd .ticker.up {
+  top: 2px;
+  border-top: 4px solid #00a100;
+  border-right: 4px solid #00a100;
+  border-bottom: 4px solid rgba(0, 0, 0, 0);
+}
+
+.event-odd .ticker.down {
+  bottom: 2px;
+  border-top: 4px solid rgba(0, 0, 0, 0);
+  border-right: 4px solid #ad101a;
+  border-bottom: 4px solid #ad101a;
+}
+
 .event-odd.selectable:not(.selected):hover {
   cursor: pointer;
   background-color: #e2e4e8;
@@ -215,4 +239,13 @@
 .event-type {
   text-align: center;
   padding: 2px;
+}
+
+@keyframes hideTrend {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
