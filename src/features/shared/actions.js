@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const Slip = require("@minus5/listic.lib");
 export const slipApi = Slip();
 
-export const combineIds = (id, sourceId) => `${sourceId}-${id}`;
+export const combineIds = (id, sourceId) => `${sourceId}_${id}`;
 
 export function getCurrentSlip() {
   const slip = slipApi.listic();
@@ -26,13 +26,7 @@ export function getCurrentSlip() {
   };
 }
 
-function constructOdd(state, oddId) {
-  const { odds, offers, events } = state.offer;
-  const odd = odds.entities[oddId];
-  if (!odd) return null;
-  const offer = offers.entities[odd.offer];
-  const event = events.entities[odd.event];
-  if (!offer || !event) return null;
+function constructOdd(odd, event, offer) {
   return {
     datum: event.vrijeme ? event.vrijeme.split("T")[0] : "",
     dogadjajId: event.baseId,
@@ -46,29 +40,48 @@ function constructOdd(state, oddId) {
     tip: odd.naziv,
     vrijeme: event.vrijeme,
     eventId: event.id,
+    oddId: `${odd.order}_${offer.offerKey}_${event.id}`,
   };
+}
+
+function constructRemovedOdds(removed = [], odds) {
+  return removed.map((removed) => {
+    const odd = odds.find((odd) => odd.oddId === removed.tecajId);
+    if (!odd) return removed;
+    return {
+      ...removed,
+      oddId: odd.id,
+    };
+  });
 }
 
 export const addOdd = createAsyncThunk(
   "slip/addOdd",
   async (oddId, { getState }) => {
-    const odd = constructOdd(getState(), oddId);
-    if (!odd) throw new Error("Failed adding odd to slip");
+    const { odds, offers, events } = getState().offer;
+    const oddFromState = odds.entities[oddId];
+    if (!oddFromState) throw new Error("Failed adding odd to slip");
+
+    const offer = offers.entities[oddFromState.offer];
+    const event = events.entities[oddFromState.event];
+    if (!offer || !event) throw new Error("Failed adding odd to slip");
+
+    const odd = constructOdd(oddFromState, event, offer);
     const ret = slipApi.add(odd);
     if (!ret.ok) throw new Error("Failed adding odd to slip");
-    const generatedOdd = slipApi
-      .tecajevi()
-      .find((tecaj) => tecaj.id === odd.id && tecaj.izvorId === odd.izvorId);
-    if (!generatedOdd) throw new Error("Failed adding odd to slip");
+    const removed = constructRemovedOdds(
+      ret.removed,
+      offer.odds.map((odd) => odds.entities[odd])
+    );
     return {
       newOdd: {
         event: odd.eventId,
         odd: oddId,
         offer: odd.offerKey,
-        innerId: combineIds(oddId, odd.izvorId),
+        innerId: combineIds(odd.id, odd.izvorId),
       },
       zamjena: ret.zamjena,
-      removed: ret.removed,
+      removed,
       ...getCurrentSlip(),
     };
   }

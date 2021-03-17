@@ -70,11 +70,22 @@ const offerSlice = createSlice({
       console.error(action.error);
     },
     [addOdd.fulfilled]: (state, action) => {
-      const { odd } = action.payload.newOdd;
-      oddsAdapter.updateOne(state.odds, {
-        id: odd,
-        changes: { selected: true },
+      const { newOdd, ...slipData } = action.payload;
+      const { odd } = newOdd;
+      const { removed = [] } = slipData;
+      const updates = [
+        {
+          id: odd,
+          changes: { selected: true },
+        },
+      ];
+      removed.forEach((odd) => {
+        updates.push({
+          id: odd.oddId,
+          changes: { selected: false },
+        });
       });
+      oddsAdapter.updateMany(state.odds, updates);
     },
   },
 });

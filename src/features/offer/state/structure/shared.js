@@ -33,6 +33,7 @@ export function getEvent(event, id, leagueId) {
   const constructed = {
     ...event,
     id,
+    baseId: event.baseId || id,
     league: leagueId,
     offers: [],
   };
