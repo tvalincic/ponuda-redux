@@ -55,7 +55,8 @@ const slipSlice = createSlice({
       console.error(action);
     },
     [changeStake.fulfilled]: (state, action) => {
-      state.stake = action.payload;
+      state = { ...state, ...action.payload };
+      return state;
     },
     [changeStake.rejected]: (_, action) => {
       console.error(action);
