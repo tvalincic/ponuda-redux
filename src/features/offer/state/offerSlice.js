@@ -34,7 +34,7 @@ const initialState = {
   events: eventsAdapter.getInitialState(),
   offers: offersAdapter.getInitialState(),
   odds: oddsAdapter.getInitialState(),
-  activeSport: 100,
+  activeSport: null,
   activeLeague: null,
   activeEvent: null,
   activeOffer: null,
