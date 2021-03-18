@@ -40,6 +40,13 @@ const initialState = {
   activeOffer: null,
 };
 
+function constructUpdate(id, changes) {
+  return {
+    id,
+    changes,
+  };
+}
+
 const offerSlice = createSlice({
   name: "offer",
   initialState,
@@ -80,19 +87,10 @@ const offerSlice = createSlice({
     },
     [addOdd.fulfilled]: (state, action) => {
       const { newOdd, ...slipData } = action.payload;
-      const { odd } = newOdd;
       const { removed = [] } = slipData;
-      const updates = [
-        {
-          id: odd,
-          changes: { selected: true },
-        },
-      ];
+      const updates = [constructUpdate(newOdd.id, { selected: true })];
       removed.forEach((odd) => {
-        updates.push({
-          id: odd.oddId,
-          changes: { selected: false },
-        });
+        updates.push(constructUpdate(odd, { selected: false }));
       });
       oddsAdapter.updateMany(state.odds, updates);
     },

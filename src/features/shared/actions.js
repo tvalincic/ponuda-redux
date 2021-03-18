@@ -2,8 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const Slip = require("@minus5/listic.lib");
 export const slipApi = Slip();
 
-export const combineIds = (id, sourceId) => `${sourceId}_${id}`;
-
 export function getCurrentSlip() {
   const slip = slipApi.listic();
   const taxCalculation = slipApi.porez.izracun(slip.ulogBez(), slip.dobitak);
@@ -47,11 +45,7 @@ function constructOdd(odd, event, offer) {
 function constructRemovedOdds(removed = [], odds) {
   return removed.map((removed) => {
     const odd = odds.find((odd) => odd.oddId === removed.tecajId);
-    if (!odd) return removed;
-    return {
-      ...removed,
-      oddId: odd.id,
-    };
+    return odd ? odd.id : null;
   });
 }
 
@@ -76,9 +70,8 @@ export const addOdd = createAsyncThunk(
     return {
       newOdd: {
         event: odd.eventId,
-        odd: oddId,
+        id: oddId,
         offer: odd.offerKey,
-        innerId: combineIds(odd.id, odd.izvorId),
       },
       zamjena: ret.zamjena,
       removed,

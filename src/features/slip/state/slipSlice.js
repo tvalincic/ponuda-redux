@@ -1,10 +1,8 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import { addOdd, getCurrentSlip, combineIds } from "../../shared/actions";
+import { addOdd, getCurrentSlip } from "../../shared/actions";
 import { changeStake } from "./actions";
 
-export const slipAdapter = createEntityAdapter({
-  selectId: (odd) => odd.innerId,
-});
+export const slipAdapter = createEntityAdapter();
 
 const initialState = slipAdapter.getInitialState({
   ...getCurrentSlip(),
@@ -12,13 +10,6 @@ const initialState = slipAdapter.getInitialState({
 
 function hasReplacement(slipData) {
   return slipData.zamjena && slipData.removed && !!slipData.removed.length;
-}
-
-function getOddIdsToRemove(odds = []) {
-  return odds.reduce((old, odd) => {
-    old.push(combineIds(odd.tecajId, odd.izvorId));
-    return old;
-  }, []);
 }
 
 const slipSlice = createSlice({
@@ -31,8 +22,7 @@ const slipSlice = createSlice({
       slipAdapter.upsertOne(state, newOdd);
 
       if (hasReplacement(slipData)) {
-        const ids = getOddIdsToRemove(slipData.removed);
-        slipAdapter.removeMany(state, ids);
+        slipAdapter.removeMany(state, slipData.removed);
       }
 
       state.odd = slipData.odd;

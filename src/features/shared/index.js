@@ -1,1 +1,1 @@
-export { combineIds, getCurrentSlip, addOdd, slipApi } from "./actions";
+export { getCurrentSlip, addOdd, slipApi } from "./actions";

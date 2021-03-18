@@ -27,9 +27,7 @@ export const Odd = ({ oddId }) => {
   const event = useSelector((state) =>
     selectEventById(state, extractId(slipOdd, "event"))
   );
-  const odd = useSelector((state) =>
-    selectOddFromOffer(state, extractId(slipOdd, "odd"))
-  );
+  const odd = useSelector((state) => selectOddFromOffer(state, oddId));
   if (!odd || !event) return null;
   return (
     <div className="odd">
