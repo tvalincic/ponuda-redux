@@ -1,0 +1,39 @@
+.diff-manager {
+  background-color: #e1e7eb;
+  padding: 10px;
+  text-align: center;
+}
+
+.diff-button {
+  padding: 6px 12px;
+  text-transform: uppercase;
+  margin-right: 10px;
+  border: 0px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  outline: none;
+  width: 70px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.diff-button.start {
+  background-color: green;
+  border: 1px solid green;
+}
+
+.diff-button.stop {
+  background-color: #ad101a;
+  border: 1px solid #ad101a;
+}
+
+.diff-button.reset {
+  background-color: #222;
+  border: 1px solid #222;
+}
+
+.timer {
+  padding: 6px 12px;
+  font-size: 14px;
+}
