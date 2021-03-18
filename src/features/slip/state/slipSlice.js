@@ -1,6 +1,6 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 import { addOdd, getCurrentSlip } from "../../shared/actions";
-import { changeStake } from "./actions";
+import { changeStake, syncSlipAfterDiff } from "./actions";
 
 export const slipAdapter = createEntityAdapter();
 
@@ -49,6 +49,13 @@ const slipSlice = createSlice({
       return state;
     },
     [changeStake.rejected]: (_, action) => {
+      console.error(action);
+    },
+    [syncSlipAfterDiff.fulfilled]: (state, action) => {
+      state = { ...state, ...action.payload };
+      return state;
+    },
+    [syncSlipAfterDiff.rejected]: (_, action) => {
       console.error(action);
     },
   },
