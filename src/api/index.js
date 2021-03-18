@@ -1,5 +1,5 @@
 import full from "./mock/full.json";
-import { diffs } from "./mock/diffs";
+import diffs from "./mock/diffs.json";
 
 var subscriptions = [];
 var counter = 0;
@@ -41,7 +41,7 @@ function stop() {
 function changeTime(value) {
   var shouldRestart = started;
   stop();
-  timer = value;
+  timer = value || 1;
   if (shouldRestart) start();
 }
 
