@@ -86,6 +86,7 @@ function constructOfferDiff(offers = {}, event, state, data) {
       return data;
     }
     checkAndPush(offerDiff, "tecajevi", offerKeyFromEvent, data.offers);
+    offerDiff.offerId = offerDiff.id;
     constructOddDiff(offerDiff.tecajevi, offer, event.id, data, state);
   });
 }
@@ -105,6 +106,7 @@ function constructOddDiff(odds = {}, offer, eventId, data, state) {
     if (oddFromState.tecaj && oddDiff.tecaj) {
       oddDiff.trend = oddDiff.tecaj - oddFromState.tecaj;
     }
+    oddDiff.oddId = oddDiff.id;
     checkAndPush(oddDiff, "", oddKeyFromOffer, data.odds);
   });
 }
